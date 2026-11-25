@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Banco de Dados da Mercearia</title>
+<style>
+:root {
+  --bg: #fbf8f1; --surface: #ffffff; --text: #2b2a26; --muted: #6b675d;
+  --accent: #2f7d4f; --accent-soft: #e3f1e8; --border: #e4dfd2; --code-bg: #25282c; --code-text: #e8e6df;
+  color-scheme: light;
+  box-sizing: border-box;
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #1b1d1a; --surface: #25282a; --text: #ecebe5; --muted: #a8a698;
+    --accent: #6cc58d; --accent-soft: #1f3327; --border: #3a3d3a; --code-bg: #111315; --code-text: #e8e6df;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #1b1d1a; --surface: #25282a; --text: #ecebe5; --muted: #a8a698;
+  --accent: #6cc58d; --accent-soft: #1f3327; --border: #3a3d3a; --code-bg: #111315; --code-text: #e8e6df;
+  color-scheme: dark;
+}
+html { scroll-padding-top: env(safe-area-inset-top, 0px); }
+* { box-sizing: border-box; }
+body {
+  margin: 0; background: var(--bg); color: var(--text);
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; line-height: 1.6;
+}
+header {
+  background: var(--accent-soft); border-bottom: 1px solid var(--border);
+  padding: 56px 20px 48px; text-align: center;
+}
+header h1 { margin: 0 0 8px; font-size: clamp(1.8rem, 5vw, 2.6rem); }
+header p { margin: 0 auto; max-width: 560px; color: var(--muted); }
+nav { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-top: 22px; }
+nav a {
+  text-decoration: none; color: var(--accent); border: 1px solid var(--accent);
+  padding: 6px 14px; border-radius: 999px; font-size: .9rem;
+}
+nav a:hover { background: var(--accent); color: var(--bg); }
+main { max-width: 860px; margin: 0 auto; padding: 8px 20px 48px; }
+section { margin-top: 40px; }
+h2 { border-left: 5px solid var(--accent); padding-left: 12px; font-size: 1.5rem; }
+.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; }
+.card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 12px; padding: 16px 18px;
+}
+.card h3 { margin: 0 0 6px; color: var(--accent); font-size: 1.05rem; }
+.card ul { margin: 0; padding-left: 18px; color: var(--muted); font-size: .92rem; }
+.scroll { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; background: var(--surface); }
+th, td { border: 1px solid var(--border); padding: 8px 12px; text-align: left; font-size: .93rem; }
+th { background: var(--accent-soft); }
+pre {
+  background: var(--code-bg); color: var(--code-text); padding: 16px;
+  border-radius: 10px; overflow-x: auto; font-size: .85rem; line-height: 1.5;
+}
+code { font-family: ui-monospace, Menlo, Consolas, monospace; }
+p code, li code { background: var(--accent-soft); padding: 1px 6px; border-radius: 4px; }
+footer { text-align: center; color: var(--muted); font-size: .88rem; padding: 24px 20px 40px; border-top: 1px solid var(--border); }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>🛒 Banco de Dados da Mercearia</h1>
+  <p>Projeto de banco de dados relacional em MySQL para controlar produtos, estoque, clientes e vendas de uma mercearia.</p>
+  <nav>
+    <a href="#sobre">Sobre</a>
+    <a href="#tabelas">Tabelas</a>
+    <a href="#relacionamentos">Relacionamentos</a>
+    <a href="#consultas">Consultas</a>
+    <a href="#executar">Como executar</a>
+  </nav>
+</header>
+
+<main>
+
+<section id="sobre">
+  <h2>Sobre o projeto</h2>
+  <p>
+    A mercearia precisa saber <strong>o que vende</strong>, <strong>quanto tem em estoque</strong> e
+    <strong>quem comprou</strong>. O banco foi modelado com 7 tabelas ligadas por chaves estrangeiras,
+    usando restrições como <code>PRIMARY KEY</code>, <code>UNIQUE</code>, <code>NOT NULL</code>,
+    <code>DEFAULT</code> e <code>CHECK</code> para manter os dados consistentes.
+  </p>
+</section>
+
+<section id="tabelas">
+  <h2>Tabelas</h2>
+  <div class="grid">
+    <div class="card"><h3>categoria</h3><ul><li>id_categoria (PK)</li><li>nome (único)</li></ul></div>
+    <div class="card"><h3>fornecedor</h3><ul><li>id_fornecedor (PK)</li><li>nome</li><li>cnpj (único)</li><li>telefone</li></ul></div>
+    <div class="card"><h3>produto</h3><ul><li>id_produto (PK)</li><li>nome, unidade</li><li>preco_venda (&gt; 0)</li><li>estoque (&ge; 0)</li><li>id_categoria (FK)</li><li>id_fornecedor (FK)</li></ul></div>
+    <div class="card"><h3>cliente</h3><ul><li>id_cliente (PK)</li><li>nome</li><li>cpf (único)</li><li>telefone</li></ul></div>
+    <div class="card"><h3>funcionario</h3><ul><li>id_funcionario (PK)</li><li>nome, cargo</li><li>data_admissao</li></ul></div>
+    <div class="card"><h3>venda</h3><ul><li>id_venda (PK)</li><li>data_venda</li><li>forma_pagamento</li><li>id_cliente (FK, opcional)</li><li>id_funcionario (FK)</li></ul></div>
+    <div class="card"><h3>item_venda</h3><ul><li>id_venda + id_produto (PK composta)</li><li>quantidade (&gt; 0)</li><li>preco_unitario</li></ul></div>
+  </div>
+</section>
+
+<section id="relacionamentos">
+  <h2>Relacionamentos</h2>
+  <div class="scroll">
+    <table>
+      <thead><tr><th>Tabela</th><th>Relação</th><th>Tabela</th></tr></thead>
+      <tbody>
+        <tr><td>categoria</td><td>1 : N</td><td>produto</td></tr>
+        <tr><td>fornecedor</td><td>1 : N</td><td>produto</td></tr>
+        <tr><td>cliente</td><td>1 : N</td><td>venda</td></tr>
+        <tr><td>funcionario</td><td>1 : N</td><td>venda</td></tr>
+        <tr><td>venda</td><td>1 : N</td><td>item_venda</td></tr>
+        <tr><td>produto</td><td>1 : N</td><td>item_venda</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p>A tabela <code>item_venda</code> resolve a relação muitos-para-muitos entre <code>venda</code> e <code>produto</code>.</p>
+</section>
+
+<section id="consultas">
+  <h2>Exemplos de consultas</h2>
+
+  <h3>Valor total de cada venda</h3>
+<pre><code>SELECT v.id_venda, v.data_venda, v.forma_pagamento,
+       SUM(i.quantidade * i.preco_unitario) AS total
+FROM venda v
+JOIN item_venda i ON i.id_venda = v.id_venda
+GROUP BY v.id_venda, v.data_venda, v.forma_pagamento;</code></pre>
+
+  <h3>Produtos com estoque baixo</h3>
+<pre><code>SELECT nome, estoque
+FROM produto
+WHERE estoque &lt; 10
+ORDER BY estoque;</code></pre>
+
+  <h3>Produtos mais vendidos</h3>
+<pre><code>SELECT p.nome, SUM(i.quantidade) AS total_vendido
+FROM item_venda i
+JOIN produto p ON p.id_produto = i.id_produto
+GROUP BY p.nome
+ORDER BY total_vendido DESC;</code></pre>
+</section>
+
+<section id="executar">
+  <h2>Como executar</h2>
+  <ol>
+    <li>Abra o MySQL Workbench ou o terminal do MySQL.</li>
+    <li>Abra o arquivo <code>mercearia.sql</code>.</li>
+    <li>Execute o script inteiro: ele cria o banco, as tabelas, insere os dados, faz as consultas e cria a view <code>vw_resumo_vendas</code>.</li>
+  </ol>
+</section>
+
+</main>
+
+<footer>
+  Projeto de Banco de Dados Relacional &middot; MySQL
+</footer>
+
+</body>
+</html>
