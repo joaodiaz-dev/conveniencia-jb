@@ -37,7 +37,7 @@ Foram utilizados relacionamentos entre as tabelas por meio de chaves primárias 
 👨‍💻 Minha contribuição
 Participei da estruturação do banco de dados, organização das tabelas, definição dos relacionamentos e desenvolvimento de consultas SQL.
 
-#📚 Aprendizados
+📚 Aprendizados
 O projeto contribuiu para aprofundar meus conhecimentos em banco de dados relacionais, modelagem de dados, comandos SQL e organização de informações.
 
 🚀 Próximos passos
